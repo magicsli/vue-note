@@ -19,7 +19,8 @@ const NoteModel = mongoose.model('noteList', noteSchema)
 
 
 const userSchema = mongoose.Schema({
-    username: { type: String, require: true },              // 用户标识
+    username: { type: String, require: true },
+    password: {type:String, require: true }              // 用户标识
 })
 const UserModel = mongoose.model('user', userSchema) 
 

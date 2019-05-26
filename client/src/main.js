@@ -1,15 +1,24 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Button, NavBar, Toast, Icon, Circle, Steps, Step} from 'vant';
-
+import { Button, NavBar, Toast, Icon, Circle, Steps, 
+  Step, CellGroup, Field, Popup, DatetimePicker, CollapseItem, 
+   Collapse} from 'vant';
 
 Vue.use(Button)
-Vue.use(NavBar)
-Vue.use(Toast)
-Vue.use(Icon)
-Vue.use(Circle)
-Vue.use(Steps)
-Vue.use(Step)
+.use(NavBar)
+.use(Toast)
+.use(Icon)
+.use(Circle)
+.use(Steps)
+.use(Step)
+.use(CellGroup)
+.use(Field)
+.use(Popup)
+.use(DatetimePicker)
+.use(Collapse)
+.use(CollapseItem);
+
+
 
 Vue.config.productionTip = false
 

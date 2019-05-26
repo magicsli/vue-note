@@ -7,18 +7,17 @@ const { NoteModel, UserModel} = require('../db/module')
 /* GET home page. */
 // 注册
 router.post('/register', function (req, res, next) {
-
-  if (!req.body.username){
-    res.send({ code: 1, msg: "哪个智障没做数据效验?" })
+  const { username, password } = req.body
+  if (!username || !password) {
+    res.send({ code: 1, msg: "数据有误, 请重新输入" })
     return
   } 
-  
-  const {username} = req.body
+
   UserModel.findOne({username}, function(err, data){
       if(data){
         res.send({code:1, msg:'此用户已存在,换个名字吧'})
       }else{
-        new UserModel({username}).save( (err, user) => {
+        new UserModel({username, password} ).save( (err, user) => {
           if(!err){
             res.cookie('userid', user._id, { maxAge: 1000 * 60 * 60 * 24 })
             res.send({ code: 0, msg: "登记成功" })
@@ -32,21 +31,21 @@ router.post('/register', function (req, res, next) {
 
 // 登录
 router.post('/login', function (req, res, next) {
-
-  if (!req.body.username) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     res.send({ code: 1, msg: "哪个智障没做数据效验?" })
     return
   }
-  const { username} = req.body;
-  UserModel.findOne({ username }, function (err, user) {
+
+  UserModel.findOne({ username, password }, function (err, user) {
     if (err || !user) {
 
-       res.send({ code: 1, msg: '查询出错' })
+       res.send({ code: 1, msg: '找不到此用户' })
        return
     }
     
     const { username, _id} = user;
-    NoteModel.find({ username }, (err, data) => {
+    NoteModel.find({ username}, (err, data) => {
       if (err) res.send({ code: 1, msg: '连接出错,请联系管理员' });
       res.cookie('userid', _id, { maxAge: 1000 * 60 * 60 * 7 })
       res.send({ code: 0, data })
@@ -117,9 +116,9 @@ router.get('/remove', function (req, res, next) {
 
 
 // 直接登录获取信息
-router.all('/', function (req, res, next) {
+router.get('/', function (req, res, next) {
   if (!req.cookies.userid) {
-    res.send({ code: 1, msg: "哪个智障没做数据效验?" })
+    res.send({ code: 1, msg: "请先登录" })
     return
   }
 
