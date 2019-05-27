@@ -1,26 +1,34 @@
 <template>
   <div class="baseheader">
     <van-nav-bar
-      title="今日事宜"
-      left-text="待办"
-      right-text="按钮"
+      :title="bool?'全部事宜':'今日事宜'"
+      :left-text="bool?'今天事宜':'全部事宜'"
       left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
-    ><van-icon name="star-o" slot="right" size="18px" /></van-nav-bar>
+    ><van-icon name="smile-o" slot="right" size="18px" /></van-nav-bar>
   </div>
 </template>
 
 <script>
 import { Toast } from 'vant'
 export default {
+  data(){
+    return {
+      bool: true
+    }
+  },
+    props:{
+      cut: Function,
+    },
   methods: {
 
     onClickLeft() {
-      Toast("返回");
+      this.cut(this.bool)
+      this.bool = !this.bool
     },
     onClickRight() {
-      Toast("按钮");
+      Toast(" 作者: MagicSli \nQQ: 2544510157");
     }
   }
 };

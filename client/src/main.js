@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import { Button, NavBar, Toast, Icon, Circle, Steps, 
   Step, CellGroup, Field, Popup, DatetimePicker, CollapseItem, 
-   Collapse} from 'vant';
+  Collapse, Notify, panel} from 'vant';
 
 Vue.use(Button)
 .use(NavBar)
@@ -16,7 +16,9 @@ Vue.use(Button)
 .use(Popup)
 .use(DatetimePicker)
 .use(Collapse)
-.use(CollapseItem);
+.use(CollapseItem)
+  .use(Notify)
+  .use(panel)
 
 
 

@@ -10,7 +10,7 @@
         size="22vw"
         layer-color="#ebedf0"
         :text="text"
-        :rate="rate"
+        :rate="setRate"
         :speed="100"
         :clockwise="false"
         :stroke-width="40"
@@ -69,19 +69,26 @@
 </template>
 
 <script>
-import { Toast} from 'vant'
+import { Toast, Notify} from 'vant'
+import { increment } from 'Api/index'
+
+
 export default {
-      data() {
+    data() {
         return {
         currentRate: 0,
-        rate: 16,
         show:false,
         message:'',
         currentTime:"12:00",
         currentDate:new Date(),
         activeName:'12',
-        isChange: false
+        isChange: false,
         };
+    },
+    props: {
+        username:String,
+        updateList:Function,
+        rate:Array
     },
     methods:{
         increment () {
@@ -107,10 +114,21 @@ export default {
                  Toast.fail('行程时间不能小于现在时间');
                 return
             }
-
-
-
-           console.log(toTime, message)
+            var username = this.username
+            increment({
+                username,
+                message,
+                toTime
+            }).then( res => {
+             const flag =  res.data.code === 0
+                    Notify({
+                    message: res.data.msg,
+                    duration: 1000,
+                    background: flag?'#07c160':"#c5c5c5"
+                    });
+                this.updateList(res.data.mes)
+            })
+            this.isChange = false;
         },
         handleRotate () {
         this.$refs.button.style.transform 
@@ -121,7 +139,15 @@ export default {
     computed: {
         text() {
             return this.currentRate.toFixed(0) + '%'
+        },
+        setRate(){
+            let temp = this.rate[0] / this.rate[1] * 100;
+            temp = isNaN(temp) ? 0 : temp
+            return temp
         }
+    },
+    watch:{
+        
     }
 }
 </script>

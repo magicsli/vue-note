@@ -68,9 +68,9 @@ router.post('/increment', function (req, res, next) {
         toTime,
         state: false,
         recordTime: Date.now(),
-      }).save((err, user) => {
+      }).save((err, mes) => {
         if (!err) {
-          res.send({ code: 0, msg: "添加成功" })
+          res.send({ code: 0, msg: "添加成功", mes })
         }
       })
     }
@@ -114,6 +114,22 @@ router.get('/remove', function (req, res, next) {
 
 })
 
+router.post('/changeState', function (req, res, next) {
+
+  const {_id, state} = req.body
+ 
+  console.log(req.body)
+  NoteModel.updateOne({ _id }, {state}, (err, user) => {
+    if (user.n) {
+          res.send({ code: 0, msg: "更新成功" })
+        }else{
+          res.send({code:1, mes:'出现意外错误,请自尽' })
+        }
+      })
+  })
+
+
+
 
 // 直接登录获取信息
 router.get('/', function (req, res, next) {
@@ -133,7 +149,7 @@ router.get('/', function (req, res, next) {
     const { username } = user;
     NoteModel.find({ username }, (err, data) => {
       if (err) res.send({ code: 1, msg: '连接出错,请联系管理员' });
-      res.send({ code: 0, data })
+      res.send({ code: 0, data, username })
     })
   })
 });
