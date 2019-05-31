@@ -132,7 +132,7 @@ router.post('/changeState', function (req, res, next) {
 
 
 // 直接登录获取信息
-router.get('/', function (req, res, next) {
+router.get('/auto', function (req, res, next) {
   if (!req.cookies.userid) {
     res.send({ code: 1, msg: "请先登录" })
     return

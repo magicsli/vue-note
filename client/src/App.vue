@@ -15,7 +15,7 @@
         label="用户名"
         right-icon="question-o"
         placeholder="请输入用户名"
-        @click-right-icon="$toast('用户名有3-15位字母或者数字组成\n 密码由4-10为字母或数字组成')"
+        @click-right-icon="$toast('用户名由3-15位字母或者数字组成\n 密码由4-10为字母或数字组成')"
       />
 
       <van-field
@@ -111,8 +111,17 @@ export default {
             if(res.data.code === 0){
               autoLogin().then( res => {
                 if(res.data.code === 0){
-                  this.messageList = res.data.data
-                  this.show = false;
+                  console.log(123456789)
+                     Toast.loading({
+                      mask: true,
+                      duration:800,
+                      message: 'loading...',
+                      onClose:()=>{
+                      this.messageList = res.data.data.sort( (mes, next) => {
+                    return mes.toTime - next.toTime
+                      });
+                      this.show = false;
+                  }})
                 }
               })
             }
@@ -125,7 +134,14 @@ export default {
               this.messageList = res.data.data.sort( (mes, next) => {
                 return mes.toTime - next.toTime
               });
-              this.show = false;
+              Toast.loading({
+                  mask: true,
+                  duration:800,
+                  message: 'loading...',
+                  onClose:()=>{
+                    this.show = false;
+                  }})
+             
             }
          })
 
@@ -184,22 +200,14 @@ export default {
        const hour = now.getHours();
        const minute = now.getMinutes();
   
-         this.messageList.forEach( mes =>{
-         const toTime = new Date(mes.toTime);
-         if(day === toTime.getDate() 
-          && month === toTime.getMonth() 
-          ){
-                hour > toTime.getHours()
-                ? step ++ 
-                : hour == toTime.getHours() 
-                ? ( minute >= toTime.getMinutes()  && step++ )
-                : null;
-         }
-            mes.state && i++
-            return true
+         this.messageList.forEach( (mes, index) =>{
+        mes.toTime < Date.now() && ( step = index )
+         mes.state && i++
+          return true
        })
-      console.log(i,this.messageList.length )
-       return [i, this.messageList.length, step -1]
+
+       console.log(i, step)
+       return [i, this.messageList.length, step]
     }
      
   },

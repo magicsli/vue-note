@@ -46,11 +46,11 @@
             <van-cell-group>
             <van-field
                 style="width:calc(90vw);margin-right:calc(5vw)"
-                v-model="message"
+                v-model ="message"
                 label="待办事宜"
                 type="textarea"
                 placeholder="不能超过30个字符"
-                rows="1"
+                rows="2"
                 autosize
             />
             </van-cell-group>
@@ -59,7 +59,7 @@
                  @click="handleRotate" 
                 type="danger">取消</van-button>
             <van-button class="time-btn" size='small'
-                 @click="()=> {handleRotate(); increment()}" 
+                 @click="incrementMess" 
                  type="info">添加</van-button>
             </div>
                 
@@ -81,7 +81,7 @@ export default {
         message:'',
         currentTime:"12:00",
         currentDate:new Date(),
-        activeName:'12',
+        activeName:"12" ,
         isChange: false,
         };
     },
@@ -91,8 +91,9 @@ export default {
         rate:Array
     },
     methods:{
-        increment () {
-            const message = this.message.trim()
+        incrementMess () {  // 添加事务的事件  
+            let message = this.message.trim()
+            console.log( message )
             if( !message || !this.isChange){
                 Toast.fail('输入不能为空');
                 return
@@ -108,13 +109,13 @@ export default {
            const day = this.currentDate.getDate();
            const toTimeStr = year + "/" + month + "/" + day + "\t" + this.currentTime + ":00"
            const toTime = new Date( toTimeStr ).getTime() 
-           
 
             if(toTime <= Date.now()){
                  Toast.fail('行程时间不能小于现在时间');
                 return
             }
             var username = this.username
+            this.handleRotate()
             increment({
                 username,
                 message,
@@ -127,14 +128,18 @@ export default {
                     background: flag?'#07c160':"#c5c5c5"
                     });
                 this.updateList(res.data.mes)
+               
             })
             this.isChange = false;
         },
-        handleRotate () {
-        this.$refs.button.style.transform 
-            = this.show ?'rotate(90deg)' :'rotate(-90deg)';
-            this.show = !this.show;
-        }
+        handleRotate () { // 增加的弹窗切换
+            this.$refs.button.style.transform 
+                = this.show ?'rotate(90deg)' :'rotate(-90deg)';
+                this.show = !this.show;
+                this.message='';
+                this.currentTime="12:00";
+                this.currentDate = new Date();
+            }
      },
     computed: {
         text() {
@@ -147,7 +152,6 @@ export default {
         }
     },
     watch:{
-        
     }
 }
 </script>

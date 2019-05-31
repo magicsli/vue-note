@@ -41,7 +41,7 @@ export default {
     filters:{
         getTime(timeNum){
             let time = new Date(timeNum)
-            const minutes = time.getMinutes() / 10 <= 1 ? time.getMinutes()+'0' : time.getMinutes() 
+            const minutes = time.getMinutes() / 10 <= 1 ? '0' + time.getMinutes(): time.getMinutes() 
             return `${time.getFullYear()}-${time.getMonth()+1}-${time.getDate()}\t
             ${time.getHours()}:${minutes}`
         },
